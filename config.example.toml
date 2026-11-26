@@ -1,0 +1,118 @@
+# houseops-bot: shared tasks for a communal house.
+# Copy to config.toml and fill in the [matrix] and [house] sections.
+
+[house]
+# The house room: task cards are posted here and tasks are created here.
+# Invite the bot to this room.
+room_id = "!yourhouseroom:matrix.org"
+# Shown as the web app's title.
+name = "Our House"
+# Suggested places (#kitchen in quick-add, chips in the web app). Anything
+# else typed as #roof_terrace becomes a new place ("Roof terrace").
+locations = ["Kitchen", "Bathroom", "Living room", "Hallway", "Garden", "Basement"]
+
+# Kinds of tasks. `key` is what #tags match (the label works too).
+# Omit the whole list to get these defaults.
+[[house.categories]]
+key = "repair"
+label = "Repair"
+emoji = "🔧"
+[[house.categories]]
+key = "cleaning"
+label = "Cleaning"
+emoji = "🧽"
+[[house.categories]]
+key = "shopping"
+label = "Shopping"
+emoji = "🛒"
+[[house.categories]]
+key = "garden"
+label = "Garden"
+emoji = "🌱"
+[[house.categories]]
+key = "admin"
+label = "Admin"
+emoji = "📄"
+[[house.categories]]
+key = "other"
+label = "Other"
+emoji = "📌"
+
+[web]
+# Mobile web app. Put it behind your reverse proxy with HTTPS; people get a
+# personal sign-in link by sending !web to the bot. Omit [web] to disable it.
+bind_addr = "0.0.0.0:8093"
+public_url = "https://house.example.org"
+
+[reminders]
+# Defaults for runtime settings. Admins can change them in a direct chat:
+#   !admin set digest_time 08:30   ·   !admin settings
+# Daily check-in, posted only when something needs attention: overdue tasks,
+# urgent tasks nobody took, and claimed tasks without news for stale_days.
+# A task is mentioned at most every 3 days.
+digest_enabled = true
+digest_time = "09:00"
+stale_days = 7
+# Weekly summary: what got done (with thanks) and what is left.
+weekly_enabled = true
+weekly_day = "sunday"
+weekly_time = "18:00"
+# Notify the whole room (@room) when an urgent task is created.
+urgent_pings_room = true
+
+[matrix]
+homeserver = "https://matrix.org"
+user_id = "@yourbot:matrix.org"
+# Secrets may instead come from MATRIX_ACCESS_TOKEN / MATRIX_RECOVERY_KEY.
+access_token = "syt_YOUR_ACCESS_TOKEN"
+device_id = "YOUR_DEVICE_ID"
+# Optional: security key from Element's "Set up Secure Backup"
+# recovery_key = "EsXX xxxx xxxx xxxx xxxx xxxx xxxx xxxx"
+
+[security]
+# Users allowed to invite the bot ("all" = anyone, [] = nobody).
+# Configured admins may always open a direct chat with the bot.
+allowed_inviters = ["@you:matrix.org"]
+# Rooms the bot may join: room IDs, [] for none, or "all" for every room.
+# Required: without it the bot refuses to start.
+allowed_rooms = ["!REPLACE_ME:example.org"]
+# Members of these rooms may also open a private chat with the bot.
+# dm_rooms = ["!REPLACE_ME:example.org"]
+
+# Users allowed to run admin commands, privately in a
+# direct chat with the bot (send !admin there for help).
+admin_users = ["@you:matrix.org"]
+
+# Which devices receive room keys:
+#   identity_based: only cross-signed devices (default, recommended)
+#   only_trusted: only explicitly verified devices
+#   all_devices: all devices, no restriction
+encryption_strategy = "identity_based"
+# Whose devices count: "cross_signed" = every device you signed with your
+# own identity (a new identity is accepted), "verified" = only after
+# !admin verify (a new identity needs !reset-trust and a new verification).
+trust = "cross_signed"
+
+[security.verification]
+# Users allowed to complete first-time verification. If omitted or empty,
+# an explicit allowed_inviters list is used as the fallback.
+allowed_users = ["@you:matrix.org"]
+# Also allow first-time verification for users sharing a joined room with the bot
+# (housemates in the house room).
+allow_users_from_joined_rooms = true
+# SAS-only verification limits.
+flow_timeout_secs = 300
+grant_ttl_secs = 600
+max_concurrent = 8
+
+[security.admin_dm]
+# Admins can open a direct chat with the bot and manage it there:
+#   !admin status | verify | settings | set <key> <value> | unset <key>
+# `!admin verify` starts mutual emoji (SAS) verification with you.
+enabled = true
+# Only accept admin commands in end-to-end encrypted direct chats.
+require_encryption = true
+# Only accept admin commands from a device that counts under `trust` above.
+require_verified_device = false
+# Also deliver broadcast posts (summaries, digests, …) into admin chats.
+receive_broadcasts = false

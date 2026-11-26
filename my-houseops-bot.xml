@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>houseops-bot</Name>
+  <Repository>backwarmetro/houseops-bot:latest</Repository>
+  <Registry>https://hub.docker.com/r/backwarmetro/houseops-bot/</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <ReadMe/>
+  <Overview>Matrix bot and mobile web app for shared house tasks: quick capture, claiming, statuses, photos, history and gentle reminders.</Overview>
+  <Category>Tools:</Category>
+  <WebUI>http://[IP]:[PORT:8093]/</WebUI>
+  <TemplateURL/>
+  <Icon/>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled></DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="Store (Matrix session, tasks, photos)" Target="/app/store" Default="/mnt/user/appdata/houseops-bot/store" Mode="rw" Description="Matrix session and crypto store, state.json with all tasks, and attachments/. Must survive container restarts; include it in backups." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/houseops-bot/store</Config>
+  <Config Name="Config directory" Target="/app/config" Default="/mnt/user/appdata/houseops-bot/config" Mode="ro" Description="Directory containing config.toml (see config.example.toml)." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/houseops-bot/config</Config>
+  <Config Name="Web interface" Target="8093" Default="8093" Mode="tcp" Description="Port of the mobile web app ([web] bind_addr). Expose it through the reverse proxy with HTTPS." Type="Port" Display="always" Required="false" Mask="false">8093</Config>
+  <Config Name="Timezone" Target="TZ" Default="Europe/Berlin" Mode="" Description="Local time for due dates and reminder times." Type="Variable" Display="always" Required="true" Mask="false">Europe/Berlin</Config>
+  <Config Name="Log level" Target="RUST_LOG" Default="houseops_bot=info,matrix_sdk=warn" Mode="" Description="Logging verbosity." Type="Variable" Display="advanced" Required="false" Mask="false">houseops_bot=info,matrix_sdk=warn</Config>
+</Container>
